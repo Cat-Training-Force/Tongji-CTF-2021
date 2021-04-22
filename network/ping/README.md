@@ -53,7 +53,6 @@ sudo systemctl restart systemd-sysctl
 
 ```bash
 # Run as my_user
-git clone https://github.com/Cat-Training-Force/ping-responder
 cd ping-responder
 docker build -t ping-responder:latest .
 docker run --read-only -d --restart always --net=host \

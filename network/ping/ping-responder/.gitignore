@@ -1,0 +1,14 @@
+.DS_Store
+*.tmp
+*.un~
+*.swp
+*.bak
+*.pyc
+*.pyo
+*.log
+*~
+*.env
+*.make
+
+__pycache__
+.orig

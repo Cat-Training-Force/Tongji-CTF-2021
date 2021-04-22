@@ -1,0 +1,5 @@
+pip
+setuptools
+wheel
+scapy==2.4.*
+flake8==3.8.4
