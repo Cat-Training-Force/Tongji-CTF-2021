@@ -26,7 +26,7 @@ echo "ExampleFlag" > flag.txt
 ```bash
 binwalk -D=".*" can_you_hear_me.exe 
 cd _can_you_hear_me.exe.extracted
-openssl enc -d -aes-256-cbc -in 388F -out flag.tar # Password: Robot36
+openssl enc -d -aes-256-cbc -in 38A5 -out flag.tar # Password: Robot36
 tar xf flag.tar
 ```
 
