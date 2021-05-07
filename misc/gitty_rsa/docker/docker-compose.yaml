@@ -1,0 +1,13 @@
+version: '3'
+services:
+    chall:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        hostname: "ctf.anzupop.com"
+        domainname: "anzupop.com"
+        user: "root"
+        read_only: true
+networks:
+    default:
+        internal: true

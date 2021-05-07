@@ -1,0 +1,6 @@
+PermitRootLogin no
+PubkeyAuthentication yes
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+AuthorizedKeysFile .ssh/authorized_keys
+Banner /etc/ssh/sshd-banner
