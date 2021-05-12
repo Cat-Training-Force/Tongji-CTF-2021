@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  webapp:
+    build: ./webApp
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./conf/nginx/http.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - webapp
+
