@@ -5,8 +5,11 @@ services:
 
   nginx:
     image: nginx:latest
+    ports:
+      - 10080:80
     volumes:
-      - ./conf/nginx/http.conf:/etc/nginx/nginx.conf
+      - ./nginx/http.conf:/etc/nginx/nginx.conf
+      - ./nginx/robots.txt:/var/www/html/robots.txt
+      - ./nginx/log/:/var/log/nginx/
     depends_on:
       - webapp
-

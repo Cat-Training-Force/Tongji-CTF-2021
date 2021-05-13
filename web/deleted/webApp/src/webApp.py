@@ -30,11 +30,11 @@ def getFile():
     fileName = request.args.get('file', '')
     try:
         with open(fileName, 'r') as file:
-            return '<pre>' + file.read() + '</pre>'
+            return '<pre>' + html.escape(file.read()) + '</pre>'
     except:
         return "Error opening/reading file"
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='8888')
+    app.run()
 
