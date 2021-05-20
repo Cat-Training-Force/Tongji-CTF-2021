@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  apache_apps:
+    build: ./docker
+    ports:
+      - 10090:80
+      - 10091:81
+      - 20001:82
+    volumes:
+      - ./apache2/log/:/var/log/apache2/

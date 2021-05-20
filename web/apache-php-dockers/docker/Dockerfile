@@ -1,7 +1,8 @@
 FROM debian:latest
 
 RUN apt update && apt upgrade -y && apt install -y php
-COPY ./src /var/www/html
+COPY ./src /var/www
+COPY ./sites-enabled /etc/apache2/sites-enabled
 COPY ./entrypoint.sh /tmp/
-RUN rm /var/www/html/index.html && chmod +x /tmp/entrypoint.sh
+RUN chmod +x /tmp/entrypoint.sh
 ENTRYPOINT ["/tmp/entrypoint.sh"]
