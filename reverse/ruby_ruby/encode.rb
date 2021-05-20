@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 class Compiler
   def self.template(flag: '', dummy: '')
     flag = flag.unpack('B*')
