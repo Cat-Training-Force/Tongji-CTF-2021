@@ -3,8 +3,8 @@ services:
   apache_apps:
     build: ./docker
     ports:
-      - 10090:80
-      - 10091:81
-      - 20001:82
+      - 20080:20080
+      - 20081:20081
+      - 20000:20000
     volumes:
       - ./apache2/log/:/var/log/apache2/
