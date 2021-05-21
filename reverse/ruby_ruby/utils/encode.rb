@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
-
+require 'zlib'
+require 'base64'
 class Compiler
   def self.jamming
     source = <<~GETTYSBURG
@@ -8,15 +9,17 @@ class Compiler
       all men are created equal.
     GETTYSBURG
 
-    source.unpack('B*')
+    source.unpack('B*').join
   end
 
   def self.template(flag: '', dummy: '')
-    flag = flag.unpack('B*')
+    flag = Base64.encode64(Zlib::deflate(flag)).unpack('B*')
     dummy = dummy.unpack('B*')
     jamming = self.jamming
     result = <<~TEMPLATE
       class Flag
+        require 'zlib'
+        require 'base64'
         def self.flag
           $stderr.puts #{jamming}
           #{dummy}
@@ -32,12 +35,20 @@ class Compiler
           #{flag}
         end
 
-        def self.to_a
+        def self.get_lower_half
           $stderr.puts #{jamming}
-          [self.dummy.pack('B*')]
         end
 
-        def self.hint
+        def self.to_a
+          $stderr.puts #{jamming}
+          [Zlib::Inflate.inflate(Base64.decode64(self.dummy.pack('B*')))]
+        end
+
+        def self.get_upper_half
+          $stderr.puts #{jamming}
+        end
+
+        def self.get_nothing
           'RubyVM::InstructionSequence'
         end
       end
