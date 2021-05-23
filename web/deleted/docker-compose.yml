@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  webapp:
+    build: ./webApp
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 10080:80
+    volumes:
+      - ./nginx/http.conf:/etc/nginx/nginx.conf
+      - ./nginx/robots.txt:/var/www/html/robots.txt
+      - ./nginx/log/:/var/log/nginx/
+    depends_on:
+      - webapp

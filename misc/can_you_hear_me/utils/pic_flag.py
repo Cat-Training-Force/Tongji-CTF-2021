@@ -29,7 +29,7 @@ def text_image(text_path, font_path=None):
         lines = tuple(l.rstrip() for l in text_file.readlines())
 
     # choose a font (you can see more detail in my library on github)
-    large_font = 60  # get better resolution with larger size
+    large_font = 25  # get better resolution with larger size
     font_path = font_path or 'cour.ttf'  # Courier New. works in windows. linux may need more explicit path
     try:
         font = PIL.ImageFont.truetype(font_path, size=large_font)

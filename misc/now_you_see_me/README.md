@@ -18,11 +18,11 @@ Encode:
 
 ```bash
 echo "ExampleFlag" > flag.txt
-./zw/encode.rb < flag.txt
+./encode.rb < flag.txt
 ```
 
 Decode:
 
 ```bash
-./zw/decode.rb < encoded_flag.txt
+./decode.rb < encoded_flag.txt
 ```
