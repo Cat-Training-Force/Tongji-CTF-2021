@@ -1,0 +1,90 @@
+# -*- mode: ruby -*-
+#
+# Vagrantfile - One development machine to rule them all.
+#
+
+
+require 'json'
+
+
+# Provisioning might need updating for different Ubuntu
+# releases, see the "provision.sh" script for details...
+ubuntu_release = "20.04"
+ubuntu_codenames = {"20.04" => "focal"}  # ...currently supported.
+
+
+# This is the minimum customization necessary but, to tailor this configuration
+# to a specific project, you should also edit the "vagrant/provision.sh" script...
+vm_name = "ICMP Ping Responder"
+vm_hostname = "ping-responder"
+vm_size = {"cpus" => 1, "memory" => 1024}
+
+# Location of the external files used by this script...
+vagrant_assets = File.dirname(__FILE__) + "/vagrant"
+
+
+# Someone may need to (locally) override the VM size for some specific task...
+vm_size_override = File.dirname(__FILE__) + "/.vagrant_size.json"
+if File.exists?(vm_size_override)
+    vm_size = JSON.parse(File.read(vm_size_override))
+end
+
+
+Vagrant.configure(2) do |config|
+    config.vagrant.plugins = ["vagrant-vbguest"]
+
+    config.vm.box = "ubuntu/#{ubuntu_codenames[ubuntu_release]}64"
+    config.vm.hostname = vm_hostname
+
+    # We prefer the shared folder to be inside the user's home (below)...
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+
+    # Support git operations inside the VM. The file provisioner requires files to exist,
+    # which in this case is a good thing as it prevents commits attributed to wrong users...
+    config.vm.provision "file", source: "~/.gitconfig", destination: "~/.gitconfig"
+
+    # Make the local user's SSH key reachable by the main provisioning script...
+    config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "/tmp/id_rsa.pub"
+
+    # Perform base-system customizations and install project-specific dependencies...
+    config.vm.provision "shell", path: "#{vagrant_assets}/provision.sh",
+                                 privileged: false  # ...run as the "vagrant" user.
+
+    config.ssh.forward_agent = true
+    config.ssh.keep_alive = true
+
+    config.vm.provider "virtualbox" do |vm, override|
+        vm.name = vm_name
+        vm.gui = false
+
+        vm.memory = vm_size["memory"]
+        vm.cpus = vm_size["cpus"]
+        vm.default_nic_type = "virtio"
+
+        # On Ubuntu boxes where guest additions are built in, we need to ensure that
+        # the vbguest plugin (required by other boxes) doesn't touch them in any way...
+        override.vbguest.auto_update = false
+        override.vbguest.allow_downgrade = false
+
+        # Resolve names using the host's stub resolver (useful for VPNs)...
+        vm.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+
+        # No need for audio in a server-type VM...
+        vm.customize ["modifyvm", :id, "--audio", "none"]
+
+        # Disable the console log set by the base box...
+        vm.customize ["modifyvm", :id, "--uart1", "0x3F8", "4"]
+        vm.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
+
+        # Expose the VM to the host instead of forwarding many ports individually
+        # for complex projects. The provisioning script will setup Avahi/mDNS to
+        # make the guest VM easily accessible through a "*.local" domain...
+        override.vm.network "private_network", type: "dhcp"
+
+        # Make the current directory visible (and editable) inside the VM...
+        override.vm.synced_folder ".", "/home/vagrant/shared"
+    end
+end
+
+
+# vim: set expandtab ts=4 sw=4 ft=ruby:
