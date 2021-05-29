@@ -1,8 +1,8 @@
 # Can You Hear Me
 
-## Description
+## Message
 
-OoOoOOO, it's a little bit noisy here.
+> OoOoOOO, it's a little bit noisy here.
 
 ## Setup
 
@@ -37,3 +37,15 @@ cd robot36
 make
 ./decode flag.wav
 ```
+
+## Writeup
+
+对给出的文件使用 binwalk 可以发现文件末尾存在 OpenSSL 加密文件，并且能看到一句话 `Robot36, it's a little bit noisy here! Let's use AES-256-CBC`，根据题目提示猜测 `Robot36` 为该 AES-256-CBC 的密钥。
+
+![](wp_imgs/binwalk.png)
+
+![](wp_imgs/comment.png)
+
+提取并解密该加密文件后，可以发现为 tar 打包文件，解压后可以得到 flag.wav。使用 Robot36 解码软件解码该音频即可得到 flag。
+
+<img src="wp_imgs/flag.png" style="zoom: 50%;" />
