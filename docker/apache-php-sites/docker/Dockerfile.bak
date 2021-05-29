@@ -1,0 +1,19 @@
+FROM debian:latest
+
+ENV DEBIAN_FRONTENT=noninteractive
+
+RUN apt update && \
+    apt upgrade -q -y && \
+    apt install -q -y php
+
+COPY ./src /var/www
+COPY ./sites-enabled /etc/apache2/sites-enabled
+
+WORKDIR /app
+COPY ./entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+RUN chown www-data:www-data -R /var/log/apache2
+
+ENTRYPOINT ["/app/entrypoint.sh"]
+

@@ -1,0 +1,15 @@
+version: "3.3"
+services:
+  apache_apps:
+    build: ./docker
+    ports:
+      - 20080:20080
+      - 20081:20081
+      - 20082:20082
+      - 20000:20000
+    volumes:
+      - ./apache2/log/:/var/log/apache2/:z
+    #command: "/bin/bash"
+    #tty: true
+    #stdin_open: true
+

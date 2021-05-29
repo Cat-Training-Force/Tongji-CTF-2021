@@ -1,0 +1,17 @@
+version: "3.3"
+services:
+  easy_stack:
+    build: ./easy_stack_docker
+    ports:
+      - 30000:9999
+  
+  ez_heap:
+    build: ./ez_heap_docker
+    ports:
+      - 30001:9999
+
+  ez_printf:
+    build: ./ez_printf_docker
+    ports:
+      - 30002:9999
+
