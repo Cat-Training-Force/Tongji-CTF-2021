@@ -1,0 +1,1 @@
+docker run -d -p "0.0.0.0:9997:9999" -h "e_printf" --name="e_printf" e_printf

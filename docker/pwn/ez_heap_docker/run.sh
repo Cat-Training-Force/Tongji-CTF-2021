@@ -1,0 +1,1 @@
+docker run -d -p "0.0.0.0:9998:9999" -h "e_heap" --name="e_heap" e_heap
